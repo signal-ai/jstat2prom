@@ -1,5 +1,5 @@
 # About
-jstat2prom collects JVM garbage collection and memory stats through jstat and converting 
+jstat2prom collects JVM garbage collection and memory stats through jstat and converts 
 them into Textfile Collector format that can be pulled by Prometheus using the node 
 exporter with `--collector.textfile.directory /path/to/directory`.
 
