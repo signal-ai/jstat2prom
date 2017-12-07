@@ -1,5 +1,6 @@
 """
 jstat2prom
+Copyright 2017 Signal Media Ltd
 """
 
 import subprocess
