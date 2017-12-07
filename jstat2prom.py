@@ -53,7 +53,6 @@ def write_to_prom(metrics):
     file.write(data)
     file.close()
     shutil.move(PROM_DIR + '/jstat.tmp', PROM_DIR + '/jstat.prom')
-    return
 
 
 def get_metrics(data):
@@ -91,9 +90,7 @@ def get_metrics(data):
 def read_from_jstat():
     command = ['jstat', '-gc']
     pid = get_pid()
-    command.append(pid)
-    command.append(INTERVAL)
-    command.append(COUNT)
+    command.extend((pid, INTERVAL, COUNT))
     if pid:
         print "Running jstat against jvm pid {}. Interval: {}".format(
             pid, INTERVAL)
@@ -104,8 +101,8 @@ def read_from_jstat():
                 line = p.stdout.readline()
                 data = re.findall(r'\d+\.?\d*', line)
                 print data
-                if (len(data)) == 16:    # jstat will not show FGC value when
-                    data.insert(14, "0")  # there is no old GCs
+                if (len(data)) == 16:     # jstat will not show FGC value when
+                    data.insert(14, "0")  # there are no old GCs
                 if (len(data)) == 17:
                     metrics = get_metrics(data)
                     write_to_prom(metrics)
