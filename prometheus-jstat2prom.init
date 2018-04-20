@@ -1,0 +1,83 @@
+#!/bin/sh +x
+
+### BEGIN INIT INFO
+# Provides:          prometheus-jstat2prom
+# Required-Start:    cloud-config
+# Should-Start:
+# Required-Stop:
+# Should-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: jstat2prom
+# Description:       Starts jstat2prom
+### END INIT INFO
+
+RETVAL=0
+
+prog="jstat2prom.py"
+jstat2prom="/opt/prometheus-jstat2prom/jstat2prom.py"
+
+start() {
+    [ -f $jstat2prom ] || return 5
+    echo -n $"Starting $prog: "
+    python -u $jstat2prom 2>&1 | logger -t jstat2prom &
+    RETVAL=$?
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Shutting down $prog: "
+    pkill -f "python -u $jstat2prom"
+    pkill jstat
+    RETVAL=$?
+    return $RETVAL
+}
+
+status() {
+    IS_RUNNING=`pgrep -f "python -u $jstat2prom"`
+    RETVAL=$?
+    [ $RETVAL = 1 ] && return 3
+    return $RETVAL
+}
+
+case "$1" in
+    start)
+        start
+        RETVAL=$?
+        ;;
+    stop)
+        stop
+        RETVAL=$?
+        ;;
+    restart|try-restart|condrestart)
+        ## Stop the service and regardless of whether it was
+        ## running or not, start it again.
+        stop
+        ## Note: try-restart is now part of LSB (as of 1.9).
+        ## RH has a similar command named condrestart.
+        start
+        RETVAL=$?
+        ;;
+    reload|force-reload)
+        # It does not support reload
+        RETVAL=3
+        ;;
+    status)
+        echo -n $"Checking for service $prog:"
+        # Return value is slightly different for the status command:
+        # 0 - service up and running
+        # 1 - service dead, but /var/run/  pid  file exists
+        # 2 - service dead, but /var/lock/ lock file exists
+        # 3 - service not running (unused)
+        # 4 - service status unknown :-(
+        # 5--199 reserved (5--99 LSB, 100--149 distro, 150--199 appl.)
+        status
+        RETVAL=$?
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|status|try-restart|condrestart|restart|force-reload|reload}"
+        RETVAL=3
+        ;;
+esac
+
+exit $RETVAL
