@@ -55,6 +55,6 @@ Just run `python jstat2prom.py`. It will run forever in a loop until interrupted
 Values will be sent to stdout. jstat requires the same user permissions as the one running the JVM.
 A file named `jstat.prom` should be written to /tmp.
 
-## Init Script
+## Start scripts
 
-The included init script `prometheus-jstat2prom.init` is included as an example for how to run `jstat2prom.py` as a service.
+The included init script `prometheus-jstat2prom.init` is included as an example for how to run `jstat2prom.py` as a service. There's also a `prometheus-jstat2prom.service` for systemd.

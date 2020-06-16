@@ -1,0 +1,10 @@
+[Unit]
+Description=Runs jstat2prom.py
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=python -u /opt/prometheus-jstat2prom/jstat2prom.py
+
+[Install]
+WantedBy=multi-user.target
