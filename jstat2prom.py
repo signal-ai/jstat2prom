@@ -118,7 +118,7 @@ def read_from_jstat():
                 print data
                 if (len(data)) == 16:     # jstat will not show FGC value when
                     data.insert(14, "0")  # there are no old GCs
-                if (len(data)) == 17:
+                if (len(data)) > 16: # Accepting CGC/CGCT but not using it for now (>JDK11)
                     metrics = get_metrics(data)
                     write_to_prom(metrics)
                 retcode = p.poll()
