@@ -41,8 +41,8 @@ METRIC_PREFIX = "jstat"
 # jvm_gc_collectors_young_collection_time_seconds gauge
 # jvm_gc_collectors_old_collection_count counter
 # jvm_gc_collectors_old_collection_time_seconds gauge
-# jvm_gc_collectors_concurent_collection_count counter
-# jvm_gc_collectors_concurent_collection_time_seconds gauge
+# jvm_gc_collectors_concurrent_collection_count counter
+# jvm_gc_collectors_concurrent_collection_time_seconds gauge
 
 
 def get_pid():
@@ -97,10 +97,10 @@ def get_metrics(data):
         'jvm_gc_collectors_old_collection_time_seconds': data[15]
     }
 
-    # Add support for concurent gc metrics available when using g1gc
+    # Add support for concurrent gc metrics available when using g1gc
     if len(data) >= 17:
-        metrics['jvm_gc_collectors_concurent_collection_count'] = data[16]
-        metrics['jvm_gc_collectors_concurent_collection_time_seconds'] = data[17]
+        metrics['jvm_gc_collectors_concurrent_collection_count'] = data[16]
+        metrics['jvm_gc_collectors_concurrent_collection_time_seconds'] = data[17]
 
     # Convert kbytes into bytes
     for k, v in metrics.iteritems():
